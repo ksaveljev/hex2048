@@ -10,6 +10,7 @@
     "watch": "webpack --watch"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^8.0.0",
     "webpack": "^5.24.3",
     "webpack-cli": "^4.5.0"
   },

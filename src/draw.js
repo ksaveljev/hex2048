@@ -1,5 +1,3 @@
-import paper from "paper";
-
 import {
     Hex,
     polygonCorners
@@ -37,12 +35,12 @@ const backgroundColor = toColor([187, 173, 160]);
 
 export function drawHex(layout, hex, color) {
     const corners = polygonCorners(layout, hex);
-    const path = new paper.Path();
+    const path = new Path();
     path.strokeColor = backgroundColor;
     path.fillColor = color;
     path.strokeWidth = 10;
     corners.forEach((corner) => {
-        path.add(new paper.Point(corner.x, corner.y));
+        path.add(new Point(corner.x, corner.y));
     });
     path.closed = true;
     path.fullySelected = false;

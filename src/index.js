@@ -1,5 +1,3 @@
-import paper from "paper";
-
 import {
     Layout,
     Point,
@@ -9,12 +7,30 @@ import {
     drawBoard
 } from "./draw";
 
-paper.setup("game");
+paper.install(window);
 
-const layout = Layout(
-    flatOrientation,
-    Point(40, 40),
-    Point(500, 500)
-);
+window.onload = function() {
+    const canvas = document.getElementById("game");
 
-drawBoard(2, layout);
+    paper.setup(canvas);
+
+    var path = new Path.Rectangle({
+        point: [75, 75],
+        size: [75, 75],
+        strokeColor: 'red'
+    });
+
+    const layout = Layout(
+        flatOrientation,
+        Point(40, 40),
+        Point(view.center.x, view.center.y)
+    );
+
+    drawBoard(2, layout);
+
+    view.onFrame = function(event) {
+        path.rotate(3);
+    }
+
+    paper.view.draw();
+}
