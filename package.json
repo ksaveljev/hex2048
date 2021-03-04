@@ -1,0 +1,19 @@
+{
+  "name": "hex2048",
+  "version": "0.1",
+  "description": "2048 game on hexagonal field",
+  "repository": "https://github.com/ksaveljev/hex2048",
+  "author": "Konstantin Saveljev",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "devDependencies": {
+    "webpack": "^5.24.3",
+    "webpack-cli": "^4.5.0"
+  },
+  "dependencies": {
+    "paper": "^0.12.11"
+  }
+}
