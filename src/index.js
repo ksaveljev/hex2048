@@ -1,11 +1,13 @@
 import {
+    Hex,
     Layout,
     Point,
     flatOrientation
 } from "./hexagons";
 import {
-    drawBoard
-} from "./draw";
+    Board,
+    addTile
+} from "./2048";
 
 paper.install(window);
 
@@ -26,7 +28,8 @@ window.onload = function() {
         Point(view.center.x, view.center.y)
     );
 
-    drawBoard(2, layout);
+    const board = Board(layout, 2);
+    const tile = addTile(board, Hex(0, 0, 0), 2);
 
     view.onFrame = function(event) {
         path.rotate(3);
