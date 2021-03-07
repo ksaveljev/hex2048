@@ -11,7 +11,7 @@ module.exports = {
     plugins: [
         new CopyPlugin({
             patterns: [
-                { from: "node_modules/paper/dist/paper-full.min.js", to: "paper.js" },
+                { from: "node_modules/p5/lib/p5.min.js", to: "p5.js" },
             ],
         }),
     ],
