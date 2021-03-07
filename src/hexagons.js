@@ -7,6 +7,14 @@ export function Hex(q, r, s) {
     throw new Error(`Invalid hex coordinates: ${q}, ${r}, ${s} (sum must be 0)`);
 }
 
+export function toString(hex) {
+    return `Hex(${hex.q}, ${hex.s}, ${hex.s})`;
+}
+
+export function equal(hexA, hexB) {
+    return hexA.q === hexB.q && hexA.s === hexB.s && hexA.r === hexB.r;
+}
+
 export function add(hexA, hexB) {
     return Hex(hexA.q + hexB.q, hexA.r + hexB.r, hexA.s + hexB.s);
 }

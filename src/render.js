@@ -1,3 +1,10 @@
+import {
+    Layout,
+    Point,
+    flatOrientation,
+    polygonCorners
+} from "./hexagons";
+
 const hexColors = [
     [205, 193, 180],  //   empty
     [238, 228, 218],  //       2
@@ -22,7 +29,39 @@ const hexColors = [
     [ 30, 184, 130]   // 1048576
 ];
 
-const backgroundColor = [187, 173, 160];
+export const backgroundColor = [187, 173, 160];
 
 const lightTextColour = [249, 246, 242];
 const darkTextColour  = [119, 110, 101];
+
+const layout = Layout(
+    flatOrientation,
+    Point(40, 40),
+    Point(500, 500)
+);
+
+export function drawGrid(p5, grid) {
+    grid.tiles.forEach((tile) => {
+        p5.fill(hexColors[0]);
+        const corners = polygonCorners(layout, tile.hex);
+        p5.stroke(backgroundColor);
+        p5.strokeWeight(10);
+        p5.beginShape();
+        corners.forEach((corner) => {
+            p5.vertex(corner.x, corner.y);
+        });
+        p5.endShape(p5.CLOSE);
+
+        if (tile.value) {
+            const color = hexColors[Math.log2(tile.value)];
+            p5.fill(color);
+
+            const corners = polygonCorners(layout, tile.hex);
+            p5.beginShape();
+            corners.forEach((corner) => {
+                p5.vertex(corner.x, corner.y);
+            });
+            p5.endShape(p5.CLOSE);
+        }
+    });
+}
