@@ -19,11 +19,18 @@ const game = (p5) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
         p5.background(backgroundColor);
 
-        const grid = Grid(2);
+        const radius = 2;
+        const grid = Grid(radius);
 
-        const hex = Hex(0, 0, 0);
-        const tile = Tile(hex, 2048);
-        setTile(grid, tile);
+        let x = 1;
+        for (var q = -radius; q <= radius; q++) {
+            const r1 = Math.max(-radius, -q - radius);
+            const r2 = Math.min(radius, -q + radius);
+            for (var r = r1; r <= r2; r++) {
+                setTile(grid, Tile(Hex(q, r, -q-r), 1<<x));
+                x++;
+            }
+        }
 
         drawGrid(p5, grid);
     };

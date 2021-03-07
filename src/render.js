@@ -2,6 +2,7 @@ import {
     Layout,
     Point,
     flatOrientation,
+    hexToPoint,
     polygonCorners
 } from "./hexagons";
 
@@ -36,32 +37,44 @@ const darkTextColour  = [119, 110, 101];
 
 const layout = Layout(
     flatOrientation,
-    Point(40, 40),
+    Point(60, 60),
     Point(500, 500)
 );
 
 export function drawGrid(p5, grid) {
     grid.tiles.forEach((tile) => {
-        p5.fill(hexColors[0]);
-        const corners = polygonCorners(layout, tile.hex);
-        p5.stroke(backgroundColor);
-        p5.strokeWeight(10);
-        p5.beginShape();
-        corners.forEach((corner) => {
-            p5.vertex(corner.x, corner.y);
-        });
-        p5.endShape(p5.CLOSE);
+        drawHexagon(p5, tile.hex, hexColors[0]);
 
         if (tile.value) {
             const color = hexColors[Math.log2(tile.value)];
-            p5.fill(color);
-
-            const corners = polygonCorners(layout, tile.hex);
-            p5.beginShape();
-            corners.forEach((corner) => {
-                p5.vertex(corner.x, corner.y);
-            });
-            p5.endShape(p5.CLOSE);
+            drawHexagon(p5, tile.hex, color);
+            drawValue(p5, tile.hex, tile.value);
         }
     });
+}
+
+function drawHexagon(p5, hex, color) {
+    const corners = polygonCorners(layout, hex);
+    p5.fill(color);
+    p5.stroke(backgroundColor);
+    p5.strokeWeight(10);
+    p5.beginShape();
+    corners.forEach((corner) => {
+        p5.vertex(corner.x, corner.y);
+    });
+    p5.endShape(p5.CLOSE);
+}
+
+function drawValue(p5, hex, value) {
+    const center = hexToPoint(layout, hex);
+    const length = Math.floor(Math.log10(value)) + 1;
+    const fontSize = 40 - 4 * (length > 2 ? length - 2 : 0);
+    const color = value > 4 ? lightTextColour : darkTextColour;
+
+    p5.noStroke();
+    p5.fill(color);
+    p5.textStyle(p5.BOLD);
+    p5.textAlign(p5.CENTER, p5.CENTER);
+    p5.textSize(fontSize);
+    p5.text(value, center.x, center.y);
 }
