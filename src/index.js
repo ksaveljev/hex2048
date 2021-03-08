@@ -9,7 +9,8 @@ import {
 import {
     Grid,
     Tile,
-    setTile
+    setTile,
+    spawn
 } from "./2048";
 import {
     backgroundColor,
@@ -27,6 +28,7 @@ const game = (p5) => {
     const radius = 2;
     const grid = Grid(radius);
 
+    /*
     let x = 1;
     for (var q = -radius; q <= radius; q++) {
         const r1 = Math.max(-radius, -q - radius);
@@ -36,9 +38,11 @@ const game = (p5) => {
             x++;
         }
     }
+    */
 
     p5.setup = () => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
+        spawn(grid, 3);
     };
 
     p5.draw = () => {

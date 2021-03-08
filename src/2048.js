@@ -1,6 +1,7 @@
 import {
     find,
-    indexOf
+    indexOf,
+    sample
 } from "lodash";
 
 import {
@@ -8,6 +9,8 @@ import {
     equal,
     toString
 } from "./hexagons";
+
+const tile2Probability = 0.9;
 
 export function Tile(hex, value) {
     return {
@@ -31,6 +34,10 @@ export function Grid(radius) {
     };
 }
 
+export function newTile(hex, v) {
+    return v < tile2Probability ? Tile(hex, 2) : Tile(hex, 4);
+}
+
 export function readTile(grid, hex) {
     const tile = find(grid.tiles, (tile) => equal(tile.hex, hex));
     if (!tile) {
@@ -46,4 +53,28 @@ export function setTile(grid, newTile) {
         throw new Error("TODO");
     }
     grid.tiles.splice(idx, 1, newTile);
+}
+
+export function emptyTiles(grid) {
+    return grid.tiles.filter((tile) => tile.value === null);
+}
+
+export function newTileHex(grid) {
+    const tiles = emptyTiles(grid);
+    if (tiles.lenght == 0) return null;
+    else return sample(tiles).hex;
+}
+
+export function placeRandomTile(grid) {
+    const hex = newTileHex(grid);
+    if (!hex) {
+        return;
+    }
+    setTile(grid, newTile(hex, Math.random()));
+}
+
+export function spawn(grid, n) {
+    while (n--) {
+        placeRandomTile(grid);
+    }
 }
