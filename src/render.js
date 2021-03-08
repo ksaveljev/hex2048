@@ -1,7 +1,4 @@
 import {
-    Layout,
-    Point,
-    flatOrientation,
     hexToPoint,
     polygonCorners
 } from "./hexagons";
@@ -35,25 +32,19 @@ export const backgroundColor = [187, 173, 160];
 const lightTextColour = [249, 246, 242];
 const darkTextColour  = [119, 110, 101];
 
-const layout = Layout(
-    flatOrientation,
-    Point(60, 60),
-    Point(500, 500)
-);
-
-export function drawGrid(p5, grid) {
+export function drawGrid(p5, layout, grid) {
     grid.tiles.forEach((tile) => {
-        drawHexagon(p5, tile.hex, hexColors[0]);
+        drawHexagon(p5, layout, tile.hex, hexColors[0]);
 
         if (tile.value) {
-            const color = hexColors[Math.log2(tile.value)];
-            drawHexagon(p5, tile.hex, color);
-            drawValue(p5, tile.hex, tile.value);
+            const color = hexColors[Math.log2(tile.value)] ?? hexColors[hexColors.length - 1];
+            drawHexagon(p5, layout, tile.hex, color);
+            drawValue(p5, layout, tile.hex, tile.value);
         }
     });
 }
 
-function drawHexagon(p5, hex, color) {
+function drawHexagon(p5, layout, hex, color) {
     const corners = polygonCorners(layout, hex);
     p5.fill(color);
     p5.stroke(backgroundColor);
@@ -65,7 +56,7 @@ function drawHexagon(p5, hex, color) {
     p5.endShape(p5.CLOSE);
 }
 
-function drawValue(p5, hex, value) {
+function drawValue(p5, layout, hex, value) {
     const center = hexToPoint(layout, hex);
     const length = Math.floor(Math.log10(value)) + 1;
     const fontSize = 40 - 4 * (length > 2 ? length - 2 : 0);
