@@ -67,7 +67,7 @@ export function emptyTiles(grid) {
 
 export function newTileHex(grid) {
     const tiles = emptyTiles(grid);
-    if (tiles.lenght == 0) return null;
+    if (tiles.length == 0) return null;
     else return sample(tiles).hex;
 }
 
