@@ -10,6 +10,7 @@ import {
     Grid,
     Tile,
     setTile,
+    slideGrid,
     spawn
 } from "./2048";
 import {
@@ -56,41 +57,20 @@ const game = (p5) => {
         p5.redraw();
     };
 
+    const directions = {
+        87: "N",
+        69: "NE",
+        81: "NW",
+        83: "S",
+        68: "SE",
+        65: "SW"
+    };
+
     p5.keyPressed = () => {
-        switch (p5.keyCode) {
-            // W = north (top)
-            case 87:
-                console.log("W");
-                break;
-
-            // E = north-east (top-right)
-            case 69:
-                console.log("E");
-                break;
-
-            // Q = north-west (top-left)
-            case 81:
-                console.log("Q");
-                break;
-
-            // S = south (bottom)
-            case 83:
-                console.log("S");
-                break;
-
-            // D = south-east (bottom-right)
-            case 68:
-                console.log("D");
-                break;
-
-            // A = south-west (bottom-left)
-            case 65:
-                console.log("A");
-                break;
-
-            default:
-                console.log(`skipping ${p5.keyCode}`);
-                break;
+        const direction = directions[p5.keyCode];
+        if (direction) {
+            slideGrid(grid, direction);
+            spawn(grid, 2); // TODO: don't spawn if grid hasn't changed
         }
     };
 };

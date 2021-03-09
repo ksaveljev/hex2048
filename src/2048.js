@@ -1,7 +1,13 @@
 import {
     find,
+    flatten,
     indexOf,
-    sample
+    reverse,
+    sample,
+    sortBy,
+    sum,
+    take,
+    zip
 } from "lodash";
 
 import {
@@ -97,4 +103,56 @@ export function groupedByTwo(values) {
     } else {
         return [];
     }
+}
+
+export function slideRow(values) {
+    const size = values.length;
+    const grouped = groupedByTwo(values.filter((v) => v !== null));
+    const newValues = take(grouped.map((group) => sum(group)).concat(Array(size).fill(null)), size);
+    const score = sum(flatten(grouped.filter((group) => group.length > 1)));
+    return [newValues, score];
+}
+
+export function slideGrid(grid, direction) {
+    let pick;
+    let sortByFn;
+    const radius = grid.radius;
+
+    switch (direction) {
+        case "N":
+        case "S":
+            pick = (hex, v) => hex.q == v;
+            sortByFn = (tile) => tile.hex.r;
+            break;
+
+        case "NE":
+        case "SW":
+            pick = (hex, v) => hex.s == v;
+            sortByFn = (tile) => tile.hex.q;
+            break;
+
+        case "NW":
+        case "SE":
+            pick = (hex, v) => hex.r == v;
+            sortByFn = (tile) => tile.hex.q;
+            break;
+    }
+
+    let totalScore = 0;
+    for (var q = -radius; q <= radius; q++) {
+        const tiles = sortBy(grid.tiles.filter((tile) => pick(tile.hex, q)), sortByFn)
+        if (["S", "NE", "SE"].includes(direction)) {
+            reverse(tiles);
+        }
+
+        const [values, score] = slideRow(tiles.map((tile) => tile.value));
+
+        zip(tiles, values).forEach(([tile, value]) => {
+            setTile(grid, Tile(tile.hex, value));
+        });
+
+        totalScore += score;
+    }
+
+    return totalScore;
 }
