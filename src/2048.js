@@ -78,3 +78,23 @@ export function spawn(grid, n) {
         placeRandomTile(grid);
     }
 }
+
+export function groupedByTwo(values) {
+    if (values.length == 1) {
+        return [values];
+    } else if (values.length == 2) {
+        if (values[0] === values[1]) {
+            return [values];
+        } else {
+            return [[values[0]], [values[1]]];
+        }
+    } else if (values.length) {
+        if (values[0] === values[1]) {
+            return [[values[0], values[1]]].concat(groupedByTwo(values.slice(2)));
+        } else {
+            return [[values[0]]].concat(groupedByTwo(values.slice(1)));
+        }
+    } else {
+        return [];
+    }
+}
