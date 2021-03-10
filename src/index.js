@@ -1,22 +1,21 @@
 import p5 from "p5";
 
 import {
-    Hex,
     Layout,
     Point,
     flatOrientation
 } from "./hexagons";
 import {
     Grid,
-    Tile,
-    setTile,
     slideGrid,
-    spawn
 } from "./2048";
 import {
     backgroundColor,
     drawGrid
 } from "./render";
+import {
+    localSpawn
+} from "./spawn";
 
 const game = (p5) => {
 
@@ -26,24 +25,12 @@ const game = (p5) => {
         Point(p5.windowWidth / 2, p5.windowHeight / 2)
     );
 
-    const radius = 2;
+    const radius = 3;
     const grid = Grid(radius);
-
-    /*
-    let x = 1;
-    for (var q = -radius; q <= radius; q++) {
-        const r1 = Math.max(-radius, -q - radius);
-        const r2 = Math.min(radius, -q + radius);
-        for (var r = r1; r <= r2; r++) {
-            setTile(grid, Tile(Hex(q, r, -q-r), 1<<x));
-            x++;
-        }
-    }
-    */
 
     p5.setup = () => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
-        spawn(grid, 3);
+        localSpawn(grid, 3);
     };
 
     p5.draw = () => {
@@ -70,7 +57,7 @@ const game = (p5) => {
         const direction = directions[p5.keyCode];
         if (direction) {
             slideGrid(grid, direction);
-            spawn(grid, 2); // TODO: don't spawn if grid hasn't changed
+            localSpawn(grid, 2); // TODO: don't spawn if grid hasn't changed
         }
     };
 };

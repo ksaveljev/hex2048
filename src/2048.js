@@ -67,21 +67,13 @@ export function emptyTiles(grid) {
 
 export function newTileHex(grid) {
     const tiles = emptyTiles(grid);
-    if (tiles.length == 0) return null;
-    else return sample(tiles).hex;
+    return tiles.length ?  sample(tiles).hex : null;
 }
 
 export function placeRandomTile(grid) {
     const hex = newTileHex(grid);
-    if (!hex) {
-        return;
-    }
-    setTile(grid, newTile(hex, Math.random()));
-}
-
-export function spawn(grid, n) {
-    while (n--) {
-        placeRandomTile(grid);
+    if (hex) {
+        setTile(grid, newTile(hex, Math.random()));
     }
 }
 
@@ -108,7 +100,7 @@ export function groupedByTwo(values) {
 export function slideRow(values) {
     const size = values.length;
     const grouped = groupedByTwo(values.filter((v) => v !== null));
-    const newValues = take(grouped.map((group) => sum(group)).concat(Array(size).fill(null)), size);
+    const newValues = take(grouped.map(sum).concat(Array(size).fill(null)), size);
     const score = sum(flatten(grouped.filter((group) => group.length > 1)));
     return [newValues, score];
 }
@@ -139,6 +131,7 @@ export function slideGrid(grid, direction) {
     }
 
     let totalScore = 0;
+
     for (var q = -radius; q <= radius; q++) {
         const tiles = sortBy(grid.tiles.filter((tile) => pick(tile.hex, q)), sortByFn)
         if (["S", "NE", "SE"].includes(direction)) {
