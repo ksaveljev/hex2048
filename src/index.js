@@ -14,7 +14,8 @@ import {
     drawGrid
 } from "./render";
 import {
-    localSpawn
+    localSpawn,
+    remoteSpawn
 } from "./spawn";
 
 const game = (p5) => {
@@ -25,12 +26,13 @@ const game = (p5) => {
         Point(p5.windowWidth / 2, p5.windowHeight / 2)
     );
 
-    const radius = 3;
+    const radius = 2;
     const grid = Grid(radius);
 
-    p5.setup = () => {
+    p5.setup = async () => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
-        localSpawn(grid, 3);
+        //localSpawn(grid, 3);
+        await remoteSpawn(grid);
     };
 
     p5.draw = () => {
@@ -53,11 +55,13 @@ const game = (p5) => {
         65: "SW"
     };
 
-    p5.keyPressed = () => {
+    p5.keyPressed = async () => {
+
         const direction = directions[p5.keyCode];
         if (direction) {
             slideGrid(grid, direction);
-            localSpawn(grid, 2); // TODO: don't spawn if grid hasn't changed
+            //localSpawn(grid, 2); // TODO: don't spawn if grid hasn't changed
+            await remoteSpawn(grid); // TODO: don't spawn if grid hasn't changed
         }
     };
 };

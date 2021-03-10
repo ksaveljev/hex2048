@@ -40,7 +40,7 @@ export function Grid(radius) {
     };
 }
 
-export function newTile(hex, v) {
+export function newRandomTile(hex, v) {
     return v < tile2Probability ? Tile(hex, 2) : Tile(hex, 4);
 }
 
@@ -65,6 +65,10 @@ export function emptyTiles(grid) {
     return grid.tiles.filter((tile) => tile.value === null);
 }
 
+export function nonEmptyTiles(grid) {
+    return grid.tiles.filter((tile) => tile.value !== null);
+}
+
 export function newTileHex(grid) {
     const tiles = emptyTiles(grid);
     return tiles.length ?  sample(tiles).hex : null;
@@ -73,7 +77,7 @@ export function newTileHex(grid) {
 export function placeRandomTile(grid) {
     const hex = newTileHex(grid);
     if (hex) {
-        setTile(grid, newTile(hex, Math.random()));
+        setTile(grid, newRandomTile(hex, Math.random()));
     }
 }
 
