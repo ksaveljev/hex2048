@@ -17,6 +17,9 @@ import {
     localSpawn,
     remoteSpawn
 } from "./spawn";
+import {
+    getRadiusFromHash
+} from "./util";
 
 const game = (p5) => {
 
@@ -33,6 +36,7 @@ const game = (p5) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
         //localSpawn(grid, 3);
         await remoteSpawn(grid);
+        console.log(getRadiusFromHash()); // TODO: remove me
     };
 
     p5.draw = () => {
