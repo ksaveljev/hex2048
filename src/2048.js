@@ -1,4 +1,5 @@
 import {
+    cloneDeep,
     find,
     flatten,
     indexOf,
@@ -56,7 +57,7 @@ export function setTile(grid, newTile) {
     const currentTile = readTile(grid, newTile.hex);
     const idx = indexOf(grid.tiles, currentTile);
     if (idx == -1) {
-        throw new Error("TODO");
+        throw new Error("Unknown error in setTile");
     }
     grid.tiles.splice(idx, 1, newTile);
 }
@@ -113,6 +114,7 @@ export function slideGrid(grid, direction) {
     let pick;
     let sortByFn;
     const radius = grid.radius;
+    const newGrid = cloneDeep(grid);
 
     switch (direction) {
         case "N":
@@ -137,7 +139,7 @@ export function slideGrid(grid, direction) {
     let totalScore = 0;
 
     for (var q = -radius; q <= radius; q++) {
-        const tiles = sortBy(grid.tiles.filter((tile) => pick(tile.hex, q)), sortByFn)
+        const tiles = sortBy(newGrid.tiles.filter((tile) => pick(tile.hex, q)), sortByFn)
         if (["S", "NE", "SE"].includes(direction)) {
             reverse(tiles);
         }
@@ -145,11 +147,22 @@ export function slideGrid(grid, direction) {
         const [values, score] = slideRow(tiles.map((tile) => tile.value));
 
         zip(tiles, values).forEach(([tile, value]) => {
-            setTile(grid, Tile(tile.hex, value));
+            setTile(newGrid, Tile(tile.hex, value));
         });
 
         totalScore += score;
     }
 
-    return totalScore;
+    return [newGrid, totalScore];
+}
+
+export function gridChanged(oldGrid, newGrid) {
+    for (const oldTile of oldGrid.tiles) {
+        const newTile = readTile(newGrid, oldTile.hex);
+        if (newTile.value != oldTile.value) {
+            return true;
+        }
+    }
+
+    return false;
 }

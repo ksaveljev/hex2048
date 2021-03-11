@@ -7,6 +7,7 @@ import {
 } from "./hexagons";
 import {
     Grid,
+    gridChanged,
     slideGrid,
 } from "./2048";
 import {
@@ -30,13 +31,12 @@ const game = (p5) => {
     );
 
     const radius = 2;
-    const grid = Grid(radius);
+    let grid = Grid(radius);
 
     p5.setup = async () => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
         //localSpawn(grid, 3);
         await remoteSpawn(grid);
-        console.log(getRadiusFromHash()); // TODO: remove me
     };
 
     p5.draw = () => {
@@ -63,9 +63,12 @@ const game = (p5) => {
 
         const direction = directions[p5.keyCode];
         if (direction) {
-            slideGrid(grid, direction);
-            //localSpawn(grid, 2); // TODO: don't spawn if grid hasn't changed
-            await remoteSpawn(grid); // TODO: don't spawn if grid hasn't changed
+            const [newGrid, score] = slideGrid(grid, direction);
+            if (gridChanged(grid, newGrid)) {
+                grid = newGrid;
+                //localSpawn(grid, 2);
+                await remoteSpawn(grid);
+            }
         }
     };
 };
