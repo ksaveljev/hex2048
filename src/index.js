@@ -30,7 +30,7 @@ const game = (p5) => {
         Point(p5.windowWidth / 2, p5.windowHeight / 2)
     );
 
-    const radius = 2;
+    const radius = getRadiusFromHash() ?? 2;
     let grid = Grid(radius);
 
     p5.setup = async () => {
