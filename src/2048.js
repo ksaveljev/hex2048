@@ -166,3 +166,31 @@ export function gridChanged(oldGrid, newGrid) {
 
     return false;
 }
+
+export function hasMoves(grid) {
+    if (emptyTiles(grid).length > 0) {
+        return true;
+    }
+
+    const radius = grid.radius;
+
+    const fns = [
+        [(hex, v) => hex.q == v, (tile) => tile.hex.r],
+        [(hex, v) => hex.r == v, (tile) => tile.hex.q],
+        [(hex, v) => hex.s == v, (tile) => tile.hex.q]
+    ];
+
+    for (const [pick, sortByFn] of fns) {
+        for (var q = -radius; q <= radius; q++) {
+            const tiles = sortBy(grid.tiles.filter((tile) => pick(tile.hex, q)), sortByFn)
+            for (var i = 1; i < tiles.length; i++) {
+                if (tiles[i].value == tiles[i-1].value) {
+                    return true;
+                }
+            }
+        }
+    }
+
+
+    return false;
+}

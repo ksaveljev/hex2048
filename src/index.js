@@ -8,6 +8,7 @@ import {
 import {
     Grid,
     gridChanged,
+    hasMoves,
     slideGrid,
 } from "./2048";
 import {
@@ -75,6 +76,10 @@ const game = (p5) => {
                 grid = newGrid;
                 //localSpawn(grid, 2);
                 await remoteSpawn(grid);
+            }
+
+            if (!hasMoves(grid)) {
+                console.log("DONE");
             }
         }
     };
