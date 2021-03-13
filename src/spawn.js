@@ -14,14 +14,12 @@ export function localSpawn(grid, n) {
     }
 }
 
-const remoteServerUrl = "http://51.15.207.127:13337";
-
 function json(response) {
     return response.json();
 }
 
-export async function remoteSpawn(grid) {
-    const url = `${remoteServerUrl}/${grid.radius+1}`;
+export async function remoteSpawn(serverUrl, grid) {
+    const url = `${serverUrl}/${grid.radius+1}`;
     const tiles = nonEmptyTiles(grid).map((tile) => {
         return {
             x: tile.hex.q,

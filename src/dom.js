@@ -18,3 +18,13 @@ export function updateGameStatusDom(selector, status) {
     span.innerHTML = status;
     span.setAttribute("data-status", status);
 }
+
+export function getSpawnServerUrl() {
+    const container = document.getElementById("url-server");
+    return container.value;
+}
+
+export function onSpawnServerUrlChange(fn) {
+    const container = document.getElementById("url-server");
+    container.addEventListener("change", fn);
+}

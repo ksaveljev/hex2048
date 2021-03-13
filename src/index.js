@@ -24,7 +24,9 @@ import {
     getRadiusFromHash
 } from "./util";
 import {
+    getSpawnServerUrl,
     gridToDom,
+    onSpawnServerUrlChange,
     updateGameStatusDom
 } from "./dom";
 
@@ -34,6 +36,7 @@ new p5((p5) => {
     const [width, height] = fieldSize(p5, radius);
 
     const game = {
+        url: getSpawnServerUrl("#spawn_server_url"),
         grid: Grid(radius),
         layout: Layout(
             flatOrientation,
@@ -46,10 +49,21 @@ new p5((p5) => {
 
     p5.setup = async () => {
         p5.createCanvas(width, height);
+
         gridToDom("#game", game.grid);
         updateGameStatusDom("#status", game.progress);
+
+        onSpawnServerUrlChange(async () => {
+            game.url = getSpawnServerUrl("#spawn_server_url");
+            game.grid = Grid(radius);
+            game.score = 0;
+            game.progress = "playing";
+            gridToDom("#game", game.grid);
+            updateGameStatusDom("#status", game.progress);
+            await remoteSpawn(game.url, game.grid);
+        });
         //localSpawn(grid, 3);
-        await remoteSpawn(game.grid);
+        await remoteSpawn(game.url, game.grid);
     };
 
     p5.draw = () => {
@@ -80,7 +94,7 @@ new p5((p5) => {
             if (gridChanged(game.grid, newGrid)) {
                 game.grid = newGrid;
                 //localSpawn(grid, 2);
-                await remoteSpawn(game.grid);
+                await remoteSpawn(game.url, game.grid);
 
                 gridToDom("#game", game.grid);
                 updateGameStatusDom("#status", game.progress);
