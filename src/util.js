@@ -5,7 +5,7 @@ export function getHashValue(regexp) {
 
 export function getRadiusFromHash() {
     const radius = getHashValue("test([1-9][0-9]*)");
-    return radius ? parseInt(radius) : null;
+    return radius ? parseInt(radius) - 1 : null;
 }
 
 export function fieldSize(p5, radius) {

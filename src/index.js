@@ -23,6 +23,10 @@ import {
     fieldSize,
     getRadiusFromHash
 } from "./util";
+import {
+    gridToDom,
+    updateGameStatusDom
+} from "./dom";
 
 new p5((p5) => {
     const radius = getRadiusFromHash() ?? 2;
@@ -42,6 +46,8 @@ new p5((p5) => {
 
     p5.setup = async () => {
         p5.createCanvas(width, height);
+        gridToDom("#game", game.grid);
+        updateGameStatusDom("#status", game.progress);
         //localSpawn(grid, 3);
         await remoteSpawn(game.grid);
     };
@@ -75,10 +81,14 @@ new p5((p5) => {
                 game.grid = newGrid;
                 //localSpawn(grid, 2);
                 await remoteSpawn(game.grid);
+
+                gridToDom("#game", game.grid);
+                updateGameStatusDom("#status", game.progress);
             }
 
             if (!hasMoves(game.grid)) {
                 game.progress = "game-over";
+                updateGameStatusDom("#status", game.progress);
             }
         }
     };

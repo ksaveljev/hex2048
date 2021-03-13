@@ -46,3 +46,7 @@ html, body {
 #status {
     padding-top: 10px;
 }
+
+#game {
+    display: none;
+}
