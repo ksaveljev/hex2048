@@ -5,8 +5,8 @@ export function gridToDom(selector, grid) {
     grid.tiles.forEach((tile) => {
         const div = document.createElement("div");
         div.setAttribute("data-x", tile.hex.q);
-        div.setAttribute("data-y", tile.hex.r);
-        div.setAttribute("data-z", tile.hex.s);
+        div.setAttribute("data-y", tile.hex.s);
+        div.setAttribute("data-z", tile.hex.r);
         div.setAttribute("data-value", tile.value ?? 0);
         container.appendChild(div);
     });

@@ -23,13 +23,13 @@ export async function remoteSpawn(serverUrl, grid) {
     const tiles = nonEmptyTiles(grid).map((tile) => {
         return {
             x: tile.hex.q,
-            y: tile.hex.r,
-            z: tile.hex.s,
+            y: tile.hex.s,
+            z: tile.hex.r,
             value: tile.value
         };
     });
 
-    fetch(url, {
+    await fetch(url, {
         method: "POST",
         headers: {
             "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
@@ -39,7 +39,7 @@ export async function remoteSpawn(serverUrl, grid) {
     .then(json)
     .then(function (data) {
         for (const entry of data) {
-            setTile(grid, Tile(Hex(entry.x, entry.y, entry.z), entry.value));
+            setTile(grid, Tile(Hex(entry.x, entry.z, entry.y), entry.value));
         }
     })
     .catch(function (error) {
