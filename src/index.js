@@ -69,7 +69,7 @@ new p5((p5) => {
 
     p5.keyPressed = async () => {
         const direction = directions[p5.keyCode];
-        if (direction) {
+        if (direction && game.progress === "playing") {
             const [newGrid, score] = slideGrid(game.grid, direction);
             if (gridChanged(game.grid, newGrid)) {
                 game.grid = newGrid;
@@ -78,7 +78,7 @@ new p5((p5) => {
             }
 
             if (!hasMoves(game.grid)) {
-                console.log("DONE");
+                game.progress = "game-over";
             }
         }
     };

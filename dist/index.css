@@ -42,3 +42,7 @@ html, body {
 .btn-filled:hover {
     background-color: darkgray;
 }
+
+#status {
+    padding-top: 10px;
+}
