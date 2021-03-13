@@ -20,41 +20,41 @@ import {
     remoteSpawn
 } from "./spawn";
 import {
+    fieldSize,
     getRadiusFromHash
 } from "./util";
 
-const game = (p5) => {
+new p5((p5) => {
     const radius = getRadiusFromHash() ?? 2;
-    let grid = Grid(radius);
+    const defaultSize = 60;
+    const [width, height] = fieldSize(p5, radius);
 
-    const config = {
-        size: 60,
-        width: Math.max(p5.windowWidth, (radius * 2 + 1) * 120),
-        height: Math.max(p5.windowHeight, (radius * 2 + 1) * 120)
+    const game = {
+        grid: Grid(radius),
+        layout: Layout(
+            flatOrientation,
+            Point(defaultSize, defaultSize),
+            Point(width / 2, height / 2)
+        ),
+        score: 0,
+        progress: "playing"
     };
 
-    const layout = Layout(
-        flatOrientation,
-        Point(config.size, config.size),
-        Point(config.width / 2, config.height / 2)
-    );
-
     p5.setup = async () => {
-        p5.createCanvas(config.width, config.height);
+        p5.createCanvas(width, height);
         //localSpawn(grid, 3);
-        await remoteSpawn(grid);
+        await remoteSpawn(game.grid);
     };
 
     p5.draw = () => {
         p5.background(backgroundColor);
-        drawGrid(p5, layout, grid);
+        drawGrid(p5, game.layout, game.grid);
     };
 
     p5.windowResized = () => {
-        config.width = Math.max(p5.windowWidth, (radius * 2 + 1) * 120);
-        config.height = Math.max(p5.windowHeight, (radius * 2 + 1) * 120);
-        p5.resizeCanvas(config.width, config.height);
-        layout.origin = Point(config.width / 2, config.height / 2);
+        const [width, height] = fieldSize(p5, radius);
+        game.layout.origin = Point(width / 2, height / 2);
+        p5.resizeCanvas(width, height);
         p5.redraw();
     };
 
@@ -68,21 +68,18 @@ const game = (p5) => {
     };
 
     p5.keyPressed = async () => {
-
         const direction = directions[p5.keyCode];
         if (direction) {
-            const [newGrid, score] = slideGrid(grid, direction);
-            if (gridChanged(grid, newGrid)) {
-                grid = newGrid;
+            const [newGrid, score] = slideGrid(game.grid, direction);
+            if (gridChanged(game.grid, newGrid)) {
+                game.grid = newGrid;
                 //localSpawn(grid, 2);
-                await remoteSpawn(grid);
+                await remoteSpawn(game.grid);
             }
 
-            if (!hasMoves(grid)) {
+            if (!hasMoves(game.grid)) {
                 console.log("DONE");
             }
         }
     };
-};
-
-new p5(game);
+});
